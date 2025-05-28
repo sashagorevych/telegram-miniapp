@@ -1,5 +1,12 @@
-<!-- Календарь событий -->
+eventsSearchInput: document.getElementById('eventsSearchInput'),        <!-- Календарь событий -->
         <div id="calendarView" class="content-section">
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="text" class="search-input" id="eventsSearchInput" placeholder="Поиск событий...">
+                    <div class="search-icon">🔍</div>
+                </div>
+            </div>
+            
             <div class="section-header">
                 <h2>📅 Календарь событий</h2>
                 <select class="sort-dropdown" id="eventsSortDropdown">
@@ -143,10 +150,7 @@
 
         .search-container {
             padding: 20px;
-            position: sticky;
-            top: 70px;
             background: rgba(15, 20, 25, 0.95);
-            backdrop-filter: blur(10px);
             z-index: 90;
         }
 
@@ -810,8 +814,10 @@
             events: [],
             currentCategory: null,
             filteredContent: [],
+            filteredEvents: [],
             currentView: 'categories', // 'categories', 'content', 'calendar'
             searchQuery: '',
+            eventsSearchQuery: '',
             isLoading: false
         };
 
@@ -823,6 +829,7 @@
             categoriesGrid: document.getElementById('categoriesGrid'),
             contentList: document.getElementById('contentList'),
             eventsList: document.getElementById('eventsList'),
+            eventsSearchInput: document.getElementById('eventsSearchInput'),
             headerTitle: document.getElementById('headerTitle'),
             backBtn: document.getElementById('backBtn'),
             refreshBtn: document.getElementById('refreshBtn'),
@@ -1137,8 +1144,12 @@
             elements.backBtn.style.display = 'none';
             elements.headerTitle.textContent = 'Календарь событий';
             elements.searchInput.value = '';
+            elements.eventsSearchInput.value = '';
             appData.searchQuery = '';
+            appData.eventsSearchQuery = '';
             
+            // Инициализируем отфильтрованные события
+            appData.filteredEvents = [...appData.events];
             renderEvents();
             updateNavigation();
         }
@@ -1151,24 +1162,26 @@
 
         // Отрисовка событий
         function renderEvents() {
-            if (appData.events.length === 0) {
-                elements.eventsList.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-icon">📅</div>
-                        <div>События не найдены</div>
-                    </div>
-                `;
+            if (appData.filteredEvents.length === 0) {
+                if (appData.events.length === 0) {
+                    elements.eventsList.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">📅</div>
+                            <div>События не найдены</div>
+                        </div>
+                    `;
+                } else {
+                    elements.eventsList.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">🔍</div>
+                            <div>По вашему запросу ничего не найдено</div>
+                        </div>
+                    `;
+                }
                 return;
             }
 
-            // Сортируем события по дате
-            const sortedEvents = [...appData.events].sort((a, b) => {
-                const dateA = new Date(a.date || '1970-01-01');
-                const dateB = new Date(b.date || '1970-01-01');
-                return dateA - dateB;
-            });
-
-            const eventsHTML = sortedEvents.map(event => `
+            const eventsHTML = appData.filteredEvents.map(event => `
                 <div class="event-item">
                     <div class="event-header">
                         <div class="event-title">${event.title}</div>
@@ -1267,17 +1280,34 @@
             elements.backBtn.addEventListener('click', goBack);
             elements.refreshBtn.addEventListener('click', loadData);
             elements.searchInput.addEventListener('input', searchContent);
+            elements.eventsSearchInput.addEventListener('input', searchEvents);
             elements.sortDropdown.addEventListener('change', sortContent);
             if (elements.eventsSortDropdown) {
                 elements.eventsSortDropdown.addEventListener('change', sortEvents);
             }
         }
 
+        // Поиск событий
+        function searchEvents() {
+            appData.eventsSearchQuery = elements.eventsSearchInput.value.toLowerCase().trim();
+            
+            if (!appData.eventsSearchQuery) {
+                appData.filteredEvents = [...appData.events];
+            } else {
+                appData.filteredEvents = appData.events.filter(event => 
+                    (event.title || '').toLowerCase().includes(appData.eventsSearchQuery) ||
+                    (event.description || '').toLowerCase().includes(appData.eventsSearchQuery)
+                );
+            }
+            
+            sortEvents();
+        }
+
         // Сортировка событий
         function sortEvents() {
             const sortType = elements.eventsSortDropdown.value;
             
-            appData.events.sort((a, b) => {
+            appData.filteredEvents.sort((a, b) => {
                 switch (sortType) {
                     case 'date':
                         const dateA = new Date(a.date || '1970-01-01');
