@@ -1,44 +1,9 @@
-renderContent();
-        }            eventsSearchInput: document.getElementById('eventsSearchInput'),        <!-- Календарь событий -->
-        <div id="calendarView" class="content-section">
-            <div class="container">
-                <div class="search-container">
-                    <div class="search-box">
-                        <input type="text" class="search-input" id="eventsSearchInput" placeholder="Поиск событий...">
-                        <div class="search-icon">🔍</div>
-                    </div>
-                </div>
-                
-                <div class="section-header">
-                    <h2>📅 Календарь событий</h2>
-                    <select class="sort-dropdown" id="eventsSortDropdown">
-                        <option value="date">По дате</option>
-                        <option value="title">По названию</option>
-                    </select>
-                </div>
-                <div class="events-list" id="eventsList">
-                    <div class="loading">Загрузка событий...</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Нижнее меню -->
-    <div class="bottom-navigation">
-        <button class="nav-button active" id="homeNavBtn" onclick="showHome()">
-            <img src="https://raw.githubusercontent.com/sashagorevych/telegram-miniapp/main/Home.png" alt="Главная">
-            <span>Главная</span>
-        </button>
-        <button class="nav-button" id="calendarNavBtn" onclick="showCalendar()">
-            <img src="https://raw.githubusercontent.com/sashagorevych/telegram-miniapp/main/calendar.png" alt="Календарь">
-            <span>Календарь</span>
-        </button>
-    </div><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Каталог контента</title>
+    <title>База знаний</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -53,21 +18,6 @@ renderContent();
             color: #ffffff;
             min-height: 100vh;
             overflow-x: hidden;
-        }
-
-        .logo-banner {
-            background: linear-gradient(135deg, #f5f5dc 0%, #e6e6d4 100%);
-            padding: 15px;
-            text-align: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .logo-image {
-            max-height: 60px;
-            max-width: 100%;
-            object-fit: contain;
-        }
-
         }
 
         .header {
@@ -161,165 +111,6 @@ renderContent();
             top: 50%;
             transform: translateY(-50%);
             color: rgba(255, 255, 255, 0.6);
-        }
-
-        .bottom-navigation {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            width: 100%;
-            height: 70px;
-            background: rgba(45, 45, 45, 0.95);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            display: flex;
-            z-index: 1000;
-        }
-
-        .nav-button {
-            flex: 1;
-            background: none;
-            border: none;
-            color: rgba(255, 255, 255, 0.6);
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-            transition: all 0.3s ease;
-            padding: 8px 4px;
-        }
-
-        .nav-button:hover {
-            color: rgba(255, 255, 255, 0.8);
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .nav-button.active {
-            color: #ffffff;
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .nav-button img {
-            width: 24px;
-            height: 24px;
-            object-fit: contain;
-            filter: brightness(0) invert(1);
-            opacity: 0.6;
-            transition: opacity 0.3s ease;
-        }
-
-        .nav-button:hover img,
-        .nav-button.active img {
-            opacity: 1;
-        }
-
-        .nav-button span {
-            font-size: 12px;
-            font-weight: 500;
-        }
-
-        .events-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .event-item {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 15px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-        }
-
-        .event-item::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: linear-gradient(to bottom, #10b981, #059669);
-            opacity: 0.8;
-        }
-
-        .event-item:hover {
-            background: rgba(255, 255, 255, 0.08);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-        }
-
-        .event-content {
-            display: flex;
-            gap: 15px;
-            align-items: flex-start;
-        }
-
-        .event-photo {
-            width: 50px;
-            height: 50px;
-            border-radius: 8px;
-            background: linear-gradient(135deg, #10b981, #059669);
-            flex-shrink: 0;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-        }
-
-        .event-photo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .event-details {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .event-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 8px;
-        }
-
-        .event-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #ffffff;
-            flex: 1;
-            margin-right: 10px;
-        }
-
-        .event-date {
-            background: rgba(16, 185, 129, 0.2);
-            color: #6ee7b7;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 500;
-            white-space: nowrap;
-        }
-
-        .event-time {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 14px;
-            margin-bottom: 8px;
-        }
-
-        .event-description {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 14px;
-            line-height: 1.4;
         }
 
         .container {
@@ -604,6 +395,165 @@ renderContent();
             margin-top: 10px;
         }
 
+        .bottom-navigation {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            height: 70px;
+            background: rgba(45, 45, 45, 0.95);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            display: flex;
+            z-index: 1000;
+        }
+
+        .nav-button {
+            flex: 1;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            transition: all 0.3s ease;
+            padding: 8px 4px;
+        }
+
+        .nav-button:hover {
+            color: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-button.active {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-button img {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+            filter: brightness(0) invert(1);
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-button:hover img,
+        .nav-button.active img {
+            opacity: 1;
+        }
+
+        .nav-button span {
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .events-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .event-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .event-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, #10b981, #059669);
+            opacity: 0.8;
+        }
+
+        .event-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .event-content {
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+        }
+
+        .event-photo {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            flex-shrink: 0;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .event-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .event-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .event-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .event-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+            flex: 1;
+            margin-right: 10px;
+        }
+
+        .event-date {
+            background: rgba(16, 185, 129, 0.2);
+            color: #6ee7b7;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .event-time {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .event-description {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
         .loading {
             text-align: center;
             padding: 40px;
@@ -666,53 +616,6 @@ renderContent();
             display: none;
         }
 
-        .home-button {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            width: 100%;
-            height: 60px;
-            background: rgba(45, 45, 45, 0.95);
-            border: none;
-            border-radius: 0;
-            color: white;
-            cursor: pointer;
-            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(10px);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .home-button:hover {
-            background: rgba(55, 55, 55, 0.95);
-            box-shadow: 0 -6px 25px rgba(0, 0, 0, 0.4);
-        }
-
-        .home-button:active {
-            transform: scale(0.98);
-        }
-
-        .home-button.hidden {
-            transform: translateY(100%);
-        }
-
-        .home-button img {
-            width: 28px;
-            height: 28px;
-            object-fit: contain;
-            filter: brightness(0) invert(1);
-            opacity: 0.9;
-        }
-
-        .home-button:hover img {
-            opacity: 1;
-        }
-
         @media (max-width: 480px) {
             .categories-grid {
                 gap: 12px;
@@ -724,16 +627,13 @@ renderContent();
             
             .container {
                 padding: 15px;
+                padding-bottom: 90px;
             }
             
             .content-meta {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 5px;
-            }
-            
-            .container {
-                padding-bottom: 90px;
             }
 
             .nav-button span {
@@ -786,6 +686,39 @@ renderContent();
                 <div class="loading">Загрузка контента...</div>
             </div>
         </div>
+
+        <!-- Календарь событий -->
+        <div id="calendarView" class="content-section">
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="text" class="search-input" id="eventsSearchInput" placeholder="Поиск событий...">
+                    <div class="search-icon">🔍</div>
+                </div>
+            </div>
+            
+            <div class="section-header">
+                <h2>📅 Календарь событий</h2>
+                <select class="sort-dropdown" id="eventsSortDropdown">
+                    <option value="date">По дате</option>
+                    <option value="title">По названию</option>
+                </select>
+            </div>
+            <div class="events-list" id="eventsList">
+                <div class="loading">Загрузка событий...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Нижнее меню -->
+    <div class="bottom-navigation">
+        <button class="nav-button active" id="homeNavBtn" onclick="showHome()">
+            <img src="https://raw.githubusercontent.com/sashagorevych/telegram-miniapp/main/Home.png" alt="Главная">
+            <span>Главная</span>
+        </button>
+        <button class="nav-button" id="calendarNavBtn" onclick="showCalendar()">
+            <img src="https://raw.githubusercontent.com/sashagorevych/telegram-miniapp/main/calendar.png" alt="Календарь">
+            <span>Календарь</span>
+        </button>
     </div>
 
     <div class="status-bar" id="statusBar"></div>
@@ -821,7 +754,7 @@ renderContent();
             currentCategory: null,
             filteredContent: [],
             filteredEvents: [],
-            currentView: 'categories', // 'categories', 'content', 'calendar'
+            currentView: 'categories',
             searchQuery: '',
             eventsSearchQuery: '',
             isLoading: false
@@ -949,7 +882,7 @@ renderContent();
             }
             
             const rows = apiResponse.values;
-            const headers = rows[0]; // Первая строка - заголовки
+            const headers = rows[0];
             console.log('Заголовки:', headers);
             
             const data = [];
@@ -986,412 +919,3 @@ renderContent();
                         <div style="font-size: 12px; margin-top: 10px;">Проверьте настройки Google Таблицы</div>
                     </div>
                 `;
-                return;
-            }
-
-            const categoriesHTML = appData.categories.map(category => `
-                <div class="category-card" onclick="openCategory(${category.id})">
-                    ${category.image ? `<img src="${category.image}" alt="${category.title}" class="category-image" onerror="this.style.display='none'">` : ''}
-                    <div class="category-badge">${category.count || 0}</div>
-                    <div class="category-icon">${category.icon || '📁'}</div>
-                    <div class="category-content">
-                        <div class="category-title">${category.title}</div>
-                        <div class="category-subtitle">${category.subtitle || ''}</div>
-                    </div>
-                </div>
-            `).join('');
-            
-            elements.categoriesGrid.innerHTML = categoriesHTML;
-        }
-
-        // Открытие категории
-        function openCategory(categoryId) {
-            if (tg.HapticFeedback) {
-                tg.HapticFeedback.impactOccurred('light');
-            }
-            
-            appData.currentCategory = categoryId;
-            appData.currentView = 'content';
-            const category = appData.categories.find(c => c.id === categoryId);
-            
-            if (!category) {
-                showError('Категория не найдена');
-                return;
-            }
-            
-            // Обновляем UI
-            elements.categoriesView.style.display = 'none';
-            elements.calendarView.classList.remove('active');
-            elements.contentView.classList.add('active');
-            elements.backBtn.style.display = 'block';
-            elements.headerTitle.textContent = category.title;
-            elements.sectionTitle.textContent = category.title;
-            
-            // Загружаем контент
-            loadCategoryContent(categoryId);
-            updateNavigation();
-        }
-
-        // Загрузка контента категории
-        function loadCategoryContent(categoryId) {
-            elements.contentList.innerHTML = '<div class="loading">Загрузка контента...</div>';
-            
-            setTimeout(() => {
-                const content = appData.content.filter(item => item.category_id == categoryId);
-                appData.filteredContent = [...content];
-                renderContent();
-            }, 300);
-        }
-
-        // Отрисовка контента
-        function renderContent() {
-            if (appData.filteredContent.length === 0) {
-                elements.contentList.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-icon">📭</div>
-                        <div>Контент не найден</div>
-                    </div>
-                `;
-                return;
-            }
-
-            const contentHTML = appData.filteredContent.map(item => `
-                <div class="content-item" onclick="openContent('${item.url}', '${item.title}')">
-                    <div class="content-main-image">
-                        ${item.image ? `<img src="${item.image}" alt="${item.title}" onerror="this.style.display='none'">` : ''}
-                        <div class="emoji-overlay">${item.thumbnail || '📄'}</div>
-                        ${item.duration ? `<div class="content-duration-badge">${item.duration}</div>` : ''}
-                    </div>
-                    <div class="content-details">
-                        <div class="content-header">
-                            <div class="content-info">
-                                <div class="content-title">${item.title}</div>
-                                <div class="content-meta">
-                                    ${item.season ? `<span>🎯 Сезон ${item.season}</span>` : ''}
-                                </div>
-                                ${item.speaker ? `<div class="content-speaker">👤 ${item.speaker}</div>` : ''}
-                                <div class="content-tags">
-                                    ${parseTags(item.tags).map(tag => `<span class="content-tag">${tag}</span>`).join('')}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="content-description">${item.description || ''}</div>
-                    </div>
-                </div>
-            `).join('');
-            
-            elements.contentList.innerHTML = contentHTML;
-        }
-
-        // Открытие контента
-        function openContent(url, title) {
-            if (tg.HapticFeedback) {
-                tg.HapticFeedback.impactOccurred('medium');
-            }
-            
-            if (!url || url === 'undefined') {
-                showStatus('Ссылка не найдена');
-                return;
-            }
-            
-            if (tg.openLink) {
-                tg.openLink(url);
-            } else {
-                window.open(url, '_blank');
-            }
-            
-            // Отправляем данные боту
-            if (tg.sendData) {
-                tg.sendData(JSON.stringify({
-                    action: 'content_opened',
-                    title: title,
-                    url: url,
-                    category: appData.currentCategory,
-                    timestamp: Date.now()
-                }));
-            }
-        }
-
-        // Возврат к категориям
-        function goBack() {
-            showHome();
-        }
-
-        // Показать главную страницу
-        function showHome() {
-            appData.currentView = 'categories';
-            appData.currentCategory = null;
-            
-            elements.categoriesView.style.display = 'block';
-            elements.contentView.classList.remove('active');
-            elements.calendarView.classList.remove('active');
-            
-            elements.backBtn.style.display = 'none';
-            elements.headerTitle.textContent = 'База знаний';
-            elements.searchInput.value = '';
-            appData.searchQuery = '';
-            
-            updateNavigation();
-        }
-
-        // Показать календарь
-        function showCalendar() {
-            if (tg.HapticFeedback) {
-                tg.HapticFeedback.impactOccurred('light');
-            }
-            
-            appData.currentView = 'calendar';
-            appData.currentCategory = null;
-            
-            elements.categoriesView.style.display = 'none';
-            elements.contentView.classList.remove('active');
-            elements.calendarView.classList.add('active');
-            
-            elements.backBtn.style.display = 'none';
-            elements.headerTitle.textContent = 'Календарь событий';
-            elements.searchInput.value = '';
-            elements.eventsSearchInput.value = '';
-            appData.searchQuery = '';
-            appData.eventsSearchQuery = '';
-            
-            // Инициализируем отфильтрованные события
-            appData.filteredEvents = [...appData.events];
-            renderEvents();
-            updateNavigation();
-        }
-
-        // Обновление навигации
-        function updateNavigation() {
-            elements.homeNavBtn.classList.toggle('active', appData.currentView === 'categories');
-            elements.calendarNavBtn.classList.toggle('active', appData.currentView === 'calendar');
-        }
-
-        // Отрисовка событий
-        function renderEvents() {
-            if (appData.filteredEvents.length === 0) {
-                if (appData.events.length === 0) {
-                    elements.eventsList.innerHTML = `
-                        <div class="empty-state">
-                            <div class="empty-icon">📅</div>
-                            <div>События не найдены</div>
-                        </div>
-                    `;
-                } else {
-                    elements.eventsList.innerHTML = `
-                        <div class="empty-state">
-                            <div class="empty-icon">🔍</div>
-                            <div>По вашему запросу ничего не найдено</div>
-                        </div>
-                    `;
-                }
-                return;
-            }
-
-            const eventsHTML = appData.filteredEvents.map(event => `
-                <div class="event-item" onclick="openEvent('${event.url}', '${event.title}')">
-                    <div class="event-content">
-                        <div class="event-photo">
-                            ${event.image ? `<img src="${event.image}" alt="${event.title}" onerror="this.style.display='none'">` : ''}
-                            <span style="position: ${event.image ? 'absolute' : 'static'};">📅</span>
-                        </div>
-                        <div class="event-details">
-                            <div class="event-header">
-                                <div class="event-title">${event.title}</div>
-                                ${event.date ? `<div class="event-date">${formatEventDate(event.date)}</div>` : ''}
-                            </div>
-                            ${event.time ? `<div class="event-time">🕐 ${event.time}</div>` : ''}
-                            <div class="event-description">${event.description || ''}</div>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-            
-            elements.eventsList.innerHTML = eventsHTML;
-        }
-
-        // Открытие события
-        function openEvent(url, title) {
-            if (tg.HapticFeedback) {
-                tg.HapticFeedback.impactOccurred('medium');
-            }
-            
-            if (!url || url === 'undefined' || url === 'null') {
-                showStatus('Ссылка не найдена');
-                return;
-            }
-            
-            if (tg.openLink) {
-                tg.openLink(url);
-            } else {
-                window.open(url, '_blank');
-            }
-            
-            // Отправляем данные боту
-            if (tg.sendData) {
-                tg.sendData(JSON.stringify({
-                    action: 'event_opened',
-                    title: title,
-                    url: url,
-                    timestamp: Date.now()
-                }));
-            }
-        }
-            const date = new Date(dateString);
-            const today = new Date();
-            const tomorrow = new Date(today);
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            
-            if (date.toDateString() === today.toDateString()) {
-                return 'Сегодня';
-            } else if (date.toDateString() === tomorrow.toDateString()) {
-                return 'Завтра';
-            } else {
-                return date.toLocaleDateString('ru-RU', { 
-                    day: 'numeric', 
-                    month: 'short',
-                    year: date.getFullYear() !== today.getFullYear() ? 'numeric' : undefined
-                });
-            }
-        }
-
-        // Поиск контента
-        function searchContent() {
-            appData.searchQuery = elements.searchInput.value.toLowerCase().trim();
-            
-            if (!appData.currentCategory) return;
-            
-            const allContent = appData.content.filter(item => item.category_id == appData.currentCategory);
-            
-            if (!appData.searchQuery) {
-                appData.filteredContent = [...allContent];
-            } else {
-                appData.filteredContent = allContent.filter(item => 
-                    item.title.toLowerCase().includes(appData.searchQuery) ||
-                    item.description.toLowerCase().includes(appData.searchQuery) ||
-                    item.speaker.toLowerCase().includes(appData.searchQuery) ||
-                    item.tags.toLowerCase().includes(appData.searchQuery)
-                );
-            }
-            
-            renderContent();
-        }
-
-        // Сортировка контента
-        function sortContent() {
-            const sortType = elements.sortDropdown.value;
-            
-            appData.filteredContent.sort((a, b) => {
-                switch (sortType) {
-                    case 'title':
-                        return a.title.localeCompare(b.title);
-                    case 'speaker':
-                        return (a.speaker || '').localeCompare(b.speaker || '');
-                    case 'season':
-                        return (a.season || '').localeCompare(b.season || '');
-                    case 'duration':
-                        // Простая сортировка по длительности (по первым цифрам)
-                        const aDuration = parseInt((a.duration || '0').match(/\d+/)?.[0] || '0');
-                        const bDuration = parseInt((b.duration || '0').match(/\d+/)?.[0] || '0');
-                        return bDuration - aDuration;
-                    default:
-                        return 0;
-                }
-            });
-        }
-
-        // Показ ошибки
-        function showError(message) {
-            elements.categoriesGrid.innerHTML = `
-                <div class="error-state">
-                    <div class="error-icon">⚠️</div>
-                    <div>${message}</div>
-                    <button onclick="loadData()" style="margin-top: 15px; padding: 8px 16px; background: #3b82f6; border: none; border-radius: 8px; color: white; cursor: pointer;">
-                        Повторить
-                    </button>
-                </div>
-            `;
-        }
-
-        // Настройка обработчиков событий
-        function setupEventListeners() {
-            elements.backBtn.addEventListener('click', goBack);
-            elements.refreshBtn.addEventListener('click', loadData);
-            elements.searchInput.addEventListener('input', searchContent);
-            elements.sortDropdown.addEventListener('change', sortContent);
-            
-            // Проверяем существование элементов перед добавлением обработчиков
-            if (elements.eventsSearchInput) {
-                elements.eventsSearchInput.addEventListener('input', searchEvents);
-            }
-            if (elements.eventsSortDropdown) {
-                elements.eventsSortDropdown.addEventListener('change', sortEvents);
-            }
-        }
-
-        // Поиск событий
-        function searchEvents() {
-            if (!elements.eventsSearchInput) return;
-            
-            appData.eventsSearchQuery = elements.eventsSearchInput.value.toLowerCase().trim();
-            
-            if (!appData.eventsSearchQuery) {
-                appData.filteredEvents = [...appData.events];
-            } else {
-                appData.filteredEvents = appData.events.filter(event => 
-                    (event.title || '').toLowerCase().includes(appData.eventsSearchQuery) ||
-                    (event.description || '').toLowerCase().includes(appData.eventsSearchQuery)
-                );
-            }
-            
-            sortEvents();
-        }
-
-        // Сортировка событий
-        function sortEvents() {
-            const sortType = elements.eventsSortDropdown.value;
-            
-            appData.filteredEvents.sort((a, b) => {
-                switch (sortType) {
-                    case 'date':
-                        const dateA = new Date(a.date || '1970-01-01');
-                        const dateB = new Date(b.date || '1970-01-01');
-                        return dateA - dateB;
-                    case 'title':
-                        return (a.title || '').localeCompare(b.title || '');
-                    default:
-                        return 0;
-                }
-            });
-            
-            renderEvents();
-        }
-
-        // Утилиты
-        function formatViews(views) {
-            if (views >= 1000000) return Math.floor(views / 1000000) + 'M';
-            if (views >= 1000) return Math.floor(views / 1000) + 'K';
-            return views.toString();
-        }
-
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('ru-RU', { 
-                day: 'numeric', 
-                month: 'short' 
-            });
-        }
-
-        function parseTags(tagsString) {
-            if (!tagsString) return [];
-            return tagsString.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
-        }
-
-        // Запуск приложения
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initApp);
-        } else {
-            initApp();
-        }
-    </script>
-</body>
-</html>
