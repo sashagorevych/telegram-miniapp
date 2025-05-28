@@ -494,10 +494,9 @@
             <div class="section-header">
                 <h2 id="sectionTitle">Загрузка...</h2>
                 <select class="sort-dropdown" id="sortDropdown">
-                    <option value="newest">Сначала новые</option>
-                    <option value="oldest">Сначала старые</option>
-                    <option value="popular">По популярности</option>
                     <option value="title">По названию</option>
+                    <option value="speaker">По спикеру</option>
+                    <option value="duration">По длительности</option>
                 </select>
             </div>
             <div class="content-list" id="contentList">
@@ -761,8 +760,6 @@
                             <div class="content-title">${item.title}</div>
                             <div class="content-meta">
                                 ${item.duration ? `<span>⏱️ ${item.duration}</span>` : ''}
-                                ${item.views ? `<span>👁️ ${formatViews(item.views)}</span>` : ''}
-                                ${item.date ? `<span>📅 ${formatDate(item.date)}</span>` : ''}
                             </div>
                             ${item.speaker ? `<div class="content-speaker">👤 ${item.speaker}</div>` : ''}
                             <div class="content-tags">
@@ -845,14 +842,15 @@
             
             appData.filteredContent.sort((a, b) => {
                 switch (sortType) {
-                    case 'newest':
-                        return new Date(b.date) - new Date(a.date);
-                    case 'oldest':
-                        return new Date(a.date) - new Date(b.date);
-                    case 'popular':
-                        return b.views - a.views;
                     case 'title':
                         return a.title.localeCompare(b.title);
+                    case 'speaker':
+                        return (a.speaker || '').localeCompare(b.speaker || '');
+                    case 'duration':
+                        // Простая сортировка по длительности (по первым цифрам)
+                        const aDuration = parseInt((a.duration || '0').match(/\d+/)?.[0] || '0');
+                        const bDuration = parseInt((b.duration || '0').match(/\d+/)?.[0] || '0');
+                        return bDuration - aDuration;
                     default:
                         return 0;
                 }
