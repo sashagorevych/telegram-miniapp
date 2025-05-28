@@ -1,34 +1,9 @@
-<!-- Календарь событий -->
-        <div id="calendarView" class="content-section">
-            <div class="section-header">
-                <h2>📅 Календарь событий</h2>
-                <select class="sort-dropdown" id="eventsSortDropdown">
-                    <option value="date">По дате</option>
-                    <option value="title">По названию</option>
-                </select>
-            </div>
-            <div class="events-list" id="eventsList">
-                <div class="loading">Загрузка событий...</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Нижнее меню -->
-    <div class="bottom-navigation">
-        <button class="nav-button active" id="homeNavBtn" onclick="showHome()">
-            <img src="https://raw.githubusercontent.com/sashagorevych/telegram-miniapp/main/Home.png" alt="Главная">
-            <span>Главная</span>
-        </button>
-        <button class="nav-button" id="calendarNavBtn" onclick="showCalendar()">
-            <img src="https://raw.githubusercontent.com/sashagorevych/telegram-miniapp/main/calendar.png" alt="Календарь">
-            <span>Календарь</span>
-        </button>
-    </div><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Каталог контента</title>
+    <title>База знаний</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -38,54 +13,11 @@
         }
 
         body {
-            font-family: 'Benzin', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #0f1419 0%, #1a2332 100%);
             color: #ffffff;
             min-height: 100vh;
             overflow-x: hidden;
-        }
-
-        .logo-banner {
-            background: linear-gradient(135deg, #f5f5dc 0%, #e6e6d4 100%);
-            padding: 15px;
-            text-align: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .logo-image {
-            max-height: 60px;
-            max-width: 100%;
-            object-fit: contain;
-        }
-
-        }
-
-        @font-face {
-            font-family: 'Benzin';
-            src: url('https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/inter/Inter-Regular.ttf') format('truetype');
-            font-weight: 400;
-            font-style: normal;
-        }
-
-        @font-face {
-            font-family: 'Benzin';
-            src: url('https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/inter/Inter-Medium.ttf') format('truetype');
-            font-weight: 500;
-            font-style: normal;
-        }
-
-        @font-face {
-            font-family: 'Benzin';
-            src: url('https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/inter/Inter-SemiBold.ttf') format('truetype');
-            font-weight: 600;
-            font-style: normal;
-        }
-
-        @font-face {
-            font-family: 'Benzin';
-            src: url('https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/inter/Inter-Bold.ttf') format('truetype');
-            font-weight: 700;
-            font-style: normal;
         }
 
         .header {
@@ -143,10 +75,7 @@
 
         .search-container {
             padding: 20px;
-            position: sticky;
-            top: 70px;
             background: rgba(15, 20, 25, 0.95);
-            backdrop-filter: blur(10px);
             z-index: 90;
         }
 
@@ -256,6 +185,7 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
         }
 
         .event-item::before {
@@ -273,6 +203,36 @@
             background: rgba(255, 255, 255, 0.08);
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .event-content {
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+        }
+
+        .event-photo {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            flex-shrink: 0;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .event-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .event-details {
+            flex: 1;
+            min-width: 0;
         }
 
         .event-header {
@@ -521,6 +481,38 @@
             font-weight: 500;
         }
 
+        .favorite-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            z-index: 10;
+        }
+
+        .favorite-btn:hover {
+            background: rgba(0, 0, 0, 0.8);
+            transform: scale(1.1);
+        }
+
+        .favorite-btn.active {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(15px);
+        }
+
         .content-main-image .emoji-overlay {
             position: absolute;
             top: 50%;
@@ -656,53 +648,6 @@
             display: none;
         }
 
-        .home-button {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            width: 100%;
-            height: 60px;
-            background: rgba(45, 45, 45, 0.95);
-            border: none;
-            border-radius: 0;
-            color: white;
-            cursor: pointer;
-            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(10px);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .home-button:hover {
-            background: rgba(55, 55, 55, 0.95);
-            box-shadow: 0 -6px 25px rgba(0, 0, 0, 0.4);
-        }
-
-        .home-button:active {
-            transform: scale(0.98);
-        }
-
-        .home-button.hidden {
-            transform: translateY(100%);
-        }
-
-        .home-button img {
-            width: 28px;
-            height: 28px;
-            object-fit: contain;
-            filter: brightness(0) invert(1);
-            opacity: 0.9;
-        }
-
-        .home-button:hover img {
-            opacity: 1;
-        }
-
         @media (max-width: 480px) {
             .categories-grid {
                 gap: 12px;
@@ -714,16 +659,13 @@
             
             .container {
                 padding: 15px;
+                padding-bottom: 90px;
             }
             
             .content-meta {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 5px;
-            }
-            
-            .container {
-                padding-bottom: 90px;
             }
 
             .nav-button span {
@@ -776,6 +718,72 @@
                 <div class="loading">Загрузка контента...</div>
             </div>
         </div>
+
+        <!-- Календарь событий -->
+        <div id="calendarView" class="content-section">
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="text" class="search-input" id="eventsSearchInput" placeholder="Поиск событий...">
+                    <div class="search-icon">🔍</div>
+                </div>
+            </div>
+            
+            <div class="section-header">
+                <h2>📅 Календарь событий</h2>
+                <select class="sort-dropdown" id="eventsSortDropdown">
+                    <option value="date">По дате</option>
+                    <option value="title">По названию</option>
+                </select>
+            </div>
+            
+            <div class="events-list" id="eventsList">
+                <div class="loading">Загрузка событий...</div>
+            </div>
+        </div>
+
+        <!-- Избранное -->
+        <div id="favoritesView" class="content-section">
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="text" class="search-input" id="favoritesSearchInput" placeholder="Поиск в избранном...">
+                    <div class="search-icon">🔍</div>
+                </div>
+            </div>
+            
+            <div class="section-header">
+                <h2>❤️ Избранное</h2>
+                <select class="sort-dropdown" id="favoritesSortDropdown">
+                    <option value="title">По названию</option>
+                    <option value="speaker">По спикеру</option>
+                    <option value="category">По категории</option>
+                    <option value="date_added">По дате добавления</option>
+                </select>
+            </div>
+            
+            <div class="content-list" id="favoritesList">
+                <div class="empty-state">
+                    <div class="empty-icon">💔</div>
+                    <div>Избранное пусто</div>
+                    <div style="font-size: 14px; margin-top: 10px; opacity: 0.7;">Добавьте материалы, нажав на ❤️</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Нижнее меню -->
+    <div class="bottom-navigation">
+        <button class="nav-button active" id="homeNavBtn" onclick="showHome()">
+            <img src="https://raw.githubusercontent.com/sashagorevych/telegram-miniapp/main/Home.png" alt="Главная">
+            <span>Главная</span>
+        </button>
+        <button class="nav-button" id="calendarNavBtn" onclick="showCalendar()">
+            <img src="https://raw.githubusercontent.com/sashagorevych/telegram-miniapp/main/calendar.png" alt="Календарь">
+            <span>Календарь</span>
+        </button>
+        <button class="nav-button" id="favoritesNavBtn" onclick="showFavorites()">
+            <img src="https://raw.githubusercontent.com/sashagorevych/telegram-miniapp/main/favorite.png" alt="Избранное">
+            <span>Избранное</span>
+        </button>
     </div>
 
     <div class="status-bar" id="statusBar"></div>
@@ -808,10 +816,15 @@
             categories: [],
             content: [],
             events: [],
+            favorites: [], // Список избранных материалов
             currentCategory: null,
             filteredContent: [],
-            currentView: 'categories', // 'categories', 'content', 'calendar'
+            filteredEvents: [],
+            filteredFavorites: [],
+            currentView: 'categories',
             searchQuery: '',
+            eventsSearchQuery: '',
+            favoritesSearchQuery: '',
             isLoading: false
         };
 
@@ -820,9 +833,13 @@
             categoriesView: document.getElementById('categoriesView'),
             contentView: document.getElementById('contentView'),
             calendarView: document.getElementById('calendarView'),
+            favoritesView: document.getElementById('favoritesView'),
             categoriesGrid: document.getElementById('categoriesGrid'),
             contentList: document.getElementById('contentList'),
             eventsList: document.getElementById('eventsList'),
+            favoritesList: document.getElementById('favoritesList'),
+            eventsSearchInput: document.getElementById('eventsSearchInput'),
+            favoritesSearchInput: document.getElementById('favoritesSearchInput'),
             headerTitle: document.getElementById('headerTitle'),
             backBtn: document.getElementById('backBtn'),
             refreshBtn: document.getElementById('refreshBtn'),
@@ -831,16 +848,74 @@
             sectionTitle: document.getElementById('sectionTitle'),
             sortDropdown: document.getElementById('sortDropdown'),
             eventsSortDropdown: document.getElementById('eventsSortDropdown'),
+            favoritesSortDropdown: document.getElementById('favoritesSortDropdown'),
             statusBar: document.getElementById('statusBar'),
             homeNavBtn: document.getElementById('homeNavBtn'),
-            calendarNavBtn: document.getElementById('calendarNavBtn')
+            calendarNavBtn: document.getElementById('calendarNavBtn'),
+            favoritesNavBtn: document.getElementById('favoritesNavBtn')
         };
+
+        // Функции для работы с избранным
+        function loadFavorites() {
+            const saved = localStorage.getItem('favorites');
+            if (saved) {
+                try {
+                    appData.favorites = JSON.parse(saved);
+                } catch (e) {
+                    appData.favorites = [];
+                }
+            }
+        }
+
+        function saveFavorites() {
+            localStorage.setItem('favorites', JSON.stringify(appData.favorites));
+        }
+
+        function isFavorite(contentId) {
+            return appData.favorites.some(fav => fav.id === contentId);
+        }
+
+        function toggleFavorite(content, event) {
+            if (event) {
+                event.stopPropagation();
+            }
+            
+            if (tg.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('light');
+            }
+            
+            const existingIndex = appData.favorites.findIndex(fav => fav.id === content.id);
+            
+            if (existingIndex >= 0) {
+                // Удаляем из избранного
+                appData.favorites.splice(existingIndex, 1);
+                showStatus('Удалено из избранного');
+            } else {
+                // Добавляем в избранное
+                const favoriteItem = {
+                    ...content,
+                    dateAdded: Date.now()
+                };
+                appData.favorites.push(favoriteItem);
+                showStatus('Добавлено в избранное');
+            }
+            
+            saveFavorites();
+            
+            // Обновляем UI в зависимости от текущего вида
+            if (appData.currentView === 'content') {
+                renderContent();
+            } else if (appData.currentView === 'favorites') {
+                searchFavorites();
+            }
+        }
 
         // Инициализация приложения
         async function initApp() {
             if (tg.expand) tg.expand();
             if (tg.ready) tg.ready();
             
+            loadFavorites();
             setupEventListeners();
             updateNavigation();
             await loadData();
@@ -936,7 +1011,7 @@
             }
             
             const rows = apiResponse.values;
-            const headers = rows[0]; // Первая строка - заголовки
+            const headers = rows[0];
             console.log('Заголовки:', headers);
             
             const data = [];
@@ -980,7 +1055,6 @@
                 <div class="category-card" onclick="openCategory(${category.id})">
                     ${category.image ? `<img src="${category.image}" alt="${category.title}" class="category-image" onerror="this.style.display='none'">` : ''}
                     <div class="category-badge">${category.count || 0}</div>
-                    <div class="category-icon">${category.icon || '📁'}</div>
                     <div class="category-content">
                         <div class="category-title">${category.title}</div>
                         <div class="category-subtitle">${category.subtitle || ''}</div>
@@ -989,6 +1063,249 @@
             `).join('');
             
             elements.categoriesGrid.innerHTML = categoriesHTML;
+        }
+
+        // Показать главную страницу
+        function showHome() {
+            appData.currentView = 'categories';
+            appData.currentCategory = null;
+            
+            elements.categoriesView.style.display = 'block';
+            elements.contentView.classList.remove('active');
+            elements.calendarView.classList.remove('active');
+            elements.favoritesView.classList.remove('active');
+            
+            // Показываем основной поиск обратно
+            elements.searchContainer.style.display = 'block';
+            
+            elements.backBtn.style.display = 'none';
+            elements.headerTitle.textContent = 'База знаний';
+            elements.searchInput.value = '';
+            appData.searchQuery = '';
+            
+            updateNavigation();
+        }
+
+        // Показать календарь
+        function showCalendar() {
+            if (tg.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('light');
+            }
+            
+            appData.currentView = 'calendar';
+            appData.currentCategory = null;
+            
+            elements.categoriesView.style.display = 'none';
+            elements.contentView.classList.remove('active');
+            elements.calendarView.classList.add('active');
+            elements.favoritesView.classList.remove('active');
+            
+            elements.backBtn.style.display = 'none';
+            elements.headerTitle.textContent = 'Календарь событий';
+            
+            // Скрываем основной поиск для календаря
+            elements.searchContainer.style.display = 'none';
+            
+            // Очищаем поиски
+            elements.searchInput.value = '';
+            appData.searchQuery = '';
+            appData.eventsSearchQuery = '';
+            
+            // Инициализируем отфильтрованные события
+            appData.filteredEvents = [...appData.events];
+            renderEvents();
+            updateNavigation();
+        }
+
+        // Показать избранное
+        function showFavorites() {
+            if (tg.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('light');
+            }
+            
+            appData.currentView = 'favorites';
+            appData.currentCategory = null;
+            
+            elements.categoriesView.style.display = 'none';
+            elements.contentView.classList.remove('active');
+            elements.calendarView.classList.remove('active');
+            elements.favoritesView.classList.add('active');
+            
+            elements.backBtn.style.display = 'none';
+            elements.headerTitle.textContent = 'Избранное';
+            
+            // Скрываем основной поиск для избранного
+            elements.searchContainer.style.display = 'none';
+            
+            // Очищаем поиски
+            elements.searchInput.value = '';
+            appData.searchQuery = '';
+            appData.favoritesSearchQuery = '';
+            
+            // Инициализируем отфильтрованное избранное
+            appData.filteredFavorites = [...appData.favorites];
+            renderFavorites();
+            updateNavigation();
+        }
+
+        // Обновление навигации
+        function updateNavigation() {
+            elements.homeNavBtn.classList.toggle('active', appData.currentView === 'categories');
+            elements.calendarNavBtn.classList.toggle('active', appData.currentView === 'calendar');
+            elements.favoritesNavBtn.classList.toggle('active', appData.currentView === 'favorites');
+        }
+
+        // Отрисовка событий
+        function renderEvents() {
+            if (appData.filteredEvents.length === 0) {
+                if (appData.events.length === 0) {
+                    elements.eventsList.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">📅</div>
+                            <div>События не найдены</div>
+                        </div>
+                    `;
+                } else {
+                    elements.eventsList.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">🔍</div>
+                            <div>По вашему запросу ничего не найдено</div>
+                        </div>
+                    `;
+                }
+                return;
+            }
+
+            const eventsHTML = appData.filteredEvents.map(event => `
+                <div class="event-item" onclick="openEvent('${event.url}', '${event.title}')">
+                    <div class="event-content">
+                        <div class="event-photo">
+                            ${event.image ? `<img src="${event.image}" alt="${event.title}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">` : ''}
+                            <span style="display: ${event.image ? 'none' : 'block'};">📅</span>
+                        </div>
+                        <div class="event-details">
+                            <div class="event-header">
+                                <div class="event-title">${event.title}</div>
+                                ${event.date ? `<div class="event-date">${formatEventDate(event.date)}</div>` : ''}
+                            </div>
+                            <div class="event-time">
+                                ${event.time ? `🕐 ${event.time}` : ''}
+                                ${event.time && event.speaker ? ' • ' : ''}
+                                ${event.speaker ? `👤 ${event.speaker}` : ''}
+                            </div>
+                            <div class="event-description">${event.description || ''}</div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            elements.eventsList.innerHTML = eventsHTML;
+        }
+
+        // Отрисовка избранного
+        function renderFavorites() {
+            if (appData.filteredFavorites.length === 0) {
+                if (appData.favorites.length === 0) {
+                    elements.favoritesList.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">💔</div>
+                            <div>Избранное пусто</div>
+                            <div style="font-size: 14px; margin-top: 10px; opacity: 0.7;">Добавьте материалы, нажав на ❤️</div>
+                        </div>
+                    `;
+                } else {
+                    elements.favoritesList.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">🔍</div>
+                            <div>По вашему запросу ничего не найдено</div>
+                        </div>
+                    `;
+                }
+                return;
+            }
+
+            const favoritesHTML = appData.filteredFavorites.map(item => {
+                const category = appData.categories.find(cat => cat.id === item.category_id);
+                return `
+                    <div class="content-item" onclick="openContent('${item.url}', '${item.title}')">
+                        <div class="content-main-image">
+                            ${item.image ? `<img src="${item.image}" alt="${item.title}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">` : ''}
+                            <div class="emoji-overlay" style="display: ${item.image ? 'none' : 'block'};">${item.thumbnail || '📄'}</div>
+                            ${item.duration ? `<div class="content-duration-badge">${item.duration}</div>` : ''}
+                            <button class="favorite-btn active" onclick="toggleFavorite(${JSON.stringify(item).replace(/"/g, '&quot;')}, event)">
+                                🩶
+                            </button>
+                        </div>
+                        <div class="content-details">
+                            <div class="content-header">
+                                <div class="content-info">
+                                    <div class="content-title">${item.title}</div>
+                                    <div class="content-meta">
+                                        ${item.season ? `<span>🎯 Сезон ${item.season}</span>` : ''}
+                                        ${category ? `<span>📂 ${category.title}</span>` : ''}
+                                        <span>📅 ${new Date(item.dateAdded).toLocaleDateString('ru-RU')}</span>
+                                    </div>
+                                    ${item.speaker ? `<div class="content-speaker">👤 ${item.speaker}</div>` : ''}
+                                    <div class="content-tags">
+                                        ${parseTags(item.tags).map(tag => `<span class="content-tag">${tag}</span>`).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="content-description">${item.description || ''}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            elements.favoritesList.innerHTML = favoritesHTML;
+        }
+
+        // Открытие события
+        function openEvent(url, title) {
+            if (tg.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('medium');
+            }
+            
+            if (!url || url === 'undefined' || url === 'null') {
+                showStatus('Ссылка не найдена');
+                return;
+            }
+            
+            if (tg.openLink) {
+                tg.openLink(url);
+            } else {
+                window.open(url, '_blank');
+            }
+            
+            // Отправляем данные боту
+            if (tg.sendData) {
+                tg.sendData(JSON.stringify({
+                    action: 'event_opened',
+                    title: title,
+                    url: url,
+                    timestamp: Date.now()
+                }));
+            }
+        }
+
+        // Форматирование даты события
+        function formatEventDate(dateString) {
+            const date = new Date(dateString);
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
+            if (date.toDateString() === today.toDateString()) {
+                return 'Сегодня';
+            } else if (date.toDateString() === tomorrow.toDateString()) {
+                return 'Завтра';
+            } else {
+                return date.toLocaleDateString('ru-RU', { 
+                    day: 'numeric', 
+                    month: 'short',
+                    year: date.getFullYear() !== today.getFullYear() ? 'numeric' : undefined
+                });
+            }
         }
 
         // Открытие категории
@@ -1009,6 +1326,7 @@
             // Обновляем UI
             elements.categoriesView.style.display = 'none';
             elements.calendarView.classList.remove('active');
+            elements.favoritesView.classList.remove('active');
             elements.contentView.classList.add('active');
             elements.backBtn.style.display = 'block';
             elements.headerTitle.textContent = category.title;
@@ -1045,9 +1363,12 @@
             const contentHTML = appData.filteredContent.map(item => `
                 <div class="content-item" onclick="openContent('${item.url}', '${item.title}')">
                     <div class="content-main-image">
-                        ${item.image ? `<img src="${item.image}" alt="${item.title}" onerror="this.style.display='none'">` : ''}
-                        <div class="emoji-overlay">${item.thumbnail || '📄'}</div>
+                        ${item.image ? `<img src="${item.image}" alt="${item.title}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">` : ''}
+                        <div class="emoji-overlay" style="display: ${item.image ? 'none' : 'block'};">${item.thumbnail || '📄'}</div>
                         ${item.duration ? `<div class="content-duration-badge">${item.duration}</div>` : ''}
+                        <button class="favorite-btn ${isFavorite(item.id) ? 'active' : ''}" onclick="toggleFavorite(${JSON.stringify(item).replace(/"/g, '&quot;')}, event)">
+                            ${isFavorite(item.id) ? '🩶' : '🤍'}
+                        </button>
                     </div>
                     <div class="content-details">
                         <div class="content-header">
@@ -1104,104 +1425,6 @@
             showHome();
         }
 
-        // Показать главную страницу
-        function showHome() {
-            appData.currentView = 'categories';
-            appData.currentCategory = null;
-            
-            elements.categoriesView.style.display = 'block';
-            elements.contentView.classList.remove('active');
-            elements.calendarView.classList.remove('active');
-            
-            elements.backBtn.style.display = 'none';
-            elements.headerTitle.textContent = 'База знаний';
-            elements.searchInput.value = '';
-            appData.searchQuery = '';
-            
-            updateNavigation();
-        }
-
-        // Показать календарь
-        function showCalendar() {
-            if (tg.HapticFeedback) {
-                tg.HapticFeedback.impactOccurred('light');
-            }
-            
-            appData.currentView = 'calendar';
-            appData.currentCategory = null;
-            
-            elements.categoriesView.style.display = 'none';
-            elements.contentView.classList.remove('active');
-            elements.calendarView.classList.add('active');
-            
-            elements.backBtn.style.display = 'none';
-            elements.headerTitle.textContent = 'Календарь событий';
-            elements.searchInput.value = '';
-            appData.searchQuery = '';
-            
-            renderEvents();
-            updateNavigation();
-        }
-
-        // Обновление навигации
-        function updateNavigation() {
-            elements.homeNavBtn.classList.toggle('active', appData.currentView === 'categories');
-            elements.calendarNavBtn.classList.toggle('active', appData.currentView === 'calendar');
-        }
-
-        // Отрисовка событий
-        function renderEvents() {
-            if (appData.events.length === 0) {
-                elements.eventsList.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-icon">📅</div>
-                        <div>События не найдены</div>
-                    </div>
-                `;
-                return;
-            }
-
-            // Сортируем события по дате
-            const sortedEvents = [...appData.events].sort((a, b) => {
-                const dateA = new Date(a.date || '1970-01-01');
-                const dateB = new Date(b.date || '1970-01-01');
-                return dateA - dateB;
-            });
-
-            const eventsHTML = sortedEvents.map(event => `
-                <div class="event-item">
-                    <div class="event-header">
-                        <div class="event-title">${event.title}</div>
-                        ${event.date ? `<div class="event-date">${formatEventDate(event.date)}</div>` : ''}
-                    </div>
-                    ${event.time ? `<div class="event-time">🕐 ${event.time}</div>` : ''}
-                    <div class="event-description">${event.description || ''}</div>
-                </div>
-            `).join('');
-            
-            elements.eventsList.innerHTML = eventsHTML;
-        }
-
-        // Форматирование даты события
-        function formatEventDate(dateString) {
-            const date = new Date(dateString);
-            const today = new Date();
-            const tomorrow = new Date(today);
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            
-            if (date.toDateString() === today.toDateString()) {
-                return 'Сегодня';
-            } else if (date.toDateString() === tomorrow.toDateString()) {
-                return 'Завтра';
-            } else {
-                return date.toLocaleDateString('ru-RU', { 
-                    day: 'numeric', 
-                    month: 'short',
-                    year: date.getFullYear() !== today.getFullYear() ? 'numeric' : undefined
-                });
-            }
-        }
-
         // Поиск контента
         function searchContent() {
             appData.searchQuery = elements.searchInput.value.toLowerCase().trim();
@@ -1216,12 +1439,50 @@
                 appData.filteredContent = allContent.filter(item => 
                     item.title.toLowerCase().includes(appData.searchQuery) ||
                     item.description.toLowerCase().includes(appData.searchQuery) ||
-                    item.speaker.toLowerCase().includes(appData.searchQuery) ||
+                    (item.speaker || '').toLowerCase().includes(appData.searchQuery) ||
                     item.tags.toLowerCase().includes(appData.searchQuery)
                 );
             }
             
             renderContent();
+        }
+
+        // Поиск событий
+        function searchEvents() {
+            if (!elements.eventsSearchInput) return;
+            
+            appData.eventsSearchQuery = elements.eventsSearchInput.value.toLowerCase().trim();
+            
+            if (!appData.eventsSearchQuery) {
+                appData.filteredEvents = [...appData.events];
+            } else {
+                appData.filteredEvents = appData.events.filter(event => 
+                    (event.title || '').toLowerCase().includes(appData.eventsSearchQuery) ||
+                    (event.description || '').toLowerCase().includes(appData.eventsSearchQuery)
+                );
+            }
+            
+            sortEvents();
+        }
+
+        // Поиск в избранном
+        function searchFavorites() {
+            if (!elements.favoritesSearchInput) return;
+            
+            appData.favoritesSearchQuery = elements.favoritesSearchInput.value.toLowerCase().trim();
+            
+            if (!appData.favoritesSearchQuery) {
+                appData.filteredFavorites = [...appData.favorites];
+            } else {
+                appData.filteredFavorites = appData.favorites.filter(item => 
+                    (item.title || '').toLowerCase().includes(appData.favoritesSearchQuery) ||
+                    (item.description || '').toLowerCase().includes(appData.favoritesSearchQuery) ||
+                    (item.speaker || '').toLowerCase().includes(appData.favoritesSearchQuery) ||
+                    (item.tags || '').toLowerCase().includes(appData.favoritesSearchQuery)
+                );
+            }
+            
+            sortFavorites();
         }
 
         // Сортировка контента
@@ -1237,7 +1498,6 @@
                     case 'season':
                         return (a.season || '').localeCompare(b.season || '');
                     case 'duration':
-                        // Простая сортировка по длительности (по первым цифрам)
                         const aDuration = parseInt((a.duration || '0').match(/\d+/)?.[0] || '0');
                         const bDuration = parseInt((b.duration || '0').match(/\d+/)?.[0] || '0');
                         return bDuration - aDuration;
@@ -1247,6 +1507,54 @@
             });
             
             renderContent();
+        }
+
+        // Сортировка событий
+        function sortEvents() {
+            if (!elements.eventsSortDropdown) return;
+            
+            const sortType = elements.eventsSortDropdown.value;
+            
+            appData.filteredEvents.sort((a, b) => {
+                switch (sortType) {
+                    case 'date':
+                        const dateA = new Date(a.date || '1970-01-01');
+                        const dateB = new Date(b.date || '1970-01-01');
+                        return dateA - dateB;
+                    case 'title':
+                        return (a.title || '').localeCompare(b.title || '');
+                    default:
+                        return 0;
+                }
+            });
+            
+            renderEvents();
+        }
+
+        // Сортировка избранного
+        function sortFavorites() {
+            if (!elements.favoritesSortDropdown) return;
+            
+            const sortType = elements.favoritesSortDropdown.value;
+            
+            appData.filteredFavorites.sort((a, b) => {
+                switch (sortType) {
+                    case 'title':
+                        return (a.title || '').localeCompare(b.title || '');
+                    case 'speaker':
+                        return (a.speaker || '').localeCompare(b.speaker || '');
+                    case 'category':
+                        const categoryA = appData.categories.find(cat => cat.id === a.category_id);
+                        const categoryB = appData.categories.find(cat => cat.id === b.category_id);
+                        return (categoryA?.title || '').localeCompare(categoryB?.title || '');
+                    case 'date_added':
+                        return (b.dateAdded || 0) - (a.dateAdded || 0); // Новые сверху
+                    default:
+                        return 0;
+                }
+            });
+            
+            renderFavorites();
         }
 
         // Показ ошибки
@@ -1268,29 +1576,20 @@
             elements.refreshBtn.addEventListener('click', loadData);
             elements.searchInput.addEventListener('input', searchContent);
             elements.sortDropdown.addEventListener('change', sortContent);
+            
+            // Проверяем существование элементов перед добавлением обработчиков
+            if (elements.eventsSearchInput) {
+                elements.eventsSearchInput.addEventListener('input', searchEvents);
+            }
             if (elements.eventsSortDropdown) {
                 elements.eventsSortDropdown.addEventListener('change', sortEvents);
             }
-        }
-
-        // Сортировка событий
-        function sortEvents() {
-            const sortType = elements.eventsSortDropdown.value;
-            
-            appData.events.sort((a, b) => {
-                switch (sortType) {
-                    case 'date':
-                        const dateA = new Date(a.date || '1970-01-01');
-                        const dateB = new Date(b.date || '1970-01-01');
-                        return dateA - dateB;
-                    case 'title':
-                        return (a.title || '').localeCompare(b.title || '');
-                    default:
-                        return 0;
-                }
-            });
-            
-            renderEvents();
+            if (elements.favoritesSearchInput) {
+                elements.favoritesSearchInput.addEventListener('input', searchFavorites);
+            }
+            if (elements.favoritesSortDropdown) {
+                elements.favoritesSortDropdown.addEventListener('change', sortFavorites);
+            }
         }
 
         // Утилиты
