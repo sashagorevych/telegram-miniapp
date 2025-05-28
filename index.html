@@ -503,17 +503,10 @@
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
-        // Конфигурация Google Sheets
-        const GOOGLE_SHEETS_CONFIG = {
-            SPREADSHEET_ID: '1ysOISP2VSrqq8dTwQN-JQnfNeZVpKieKafrfHr2q4KE',
-            
-            getCategoriesUrl() {
-                return `https://docs.google.com/spreadsheets/d/${this.SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=categories`;
-            },
-            
-            getContentUrl() {
-                return `https://docs.google.com/spreadsheets/d/${this.SPREADSHEET_ID}/gviz/tq?tqx=out:json&sheet=content`;
-            }
+        // Конфигурация для локальных CSV файлов
+        const CSV_CONFIG = {
+            categoriesUrl: './categories.csv',
+            contentUrl: './content.csv'
         };
 
         // Инициализация Telegram Web App
@@ -570,7 +563,7 @@
             showStatus('Загрузка данных...');
             
             try {
-                await loadGoogleSheetsData();
+                await loadCSVData();
                 renderCategories();
                 showStatus('Данные загружены!', 2000);
                 
@@ -583,16 +576,19 @@
             }
         }
 
-        // Загрузка данных из Google Sheets
-        async function loadGoogleSheetsData() {
+        // Загрузка данных из локальных CSV файлов
+        async function loadCSVData() {
             try {
-                const [categoriesData, contentData] = await Promise.all([
-                    fetchGoogleSheetData(GOOGLE_SHEETS_CONFIG.getCategoriesUrl()),
-                    fetchGoogleSheetData(GOOGLE_SHEETS_CONFIG.getContentUrl())
-                ]);
+                console.log('Загружаем категории...');
+                const categoriesCSV = await fetchCSVData(CSV_CONFIG.categoriesUrl);
+                appData.categories = parseCSVData(categoriesCSV);
                 
-                appData.categories = parseGoogleSheetData(categoriesData);
-                appData.content = parseGoogleSheetData(contentData);
+                console.log('Загружаем контент...');
+                const contentCSV = await fetchCSVData(CSV_CONFIG.contentUrl);
+                appData.content = parseCSVData(contentCSV);
+                
+                console.log('Обработанные категории:', appData.categories);
+                console.log('Обработанный контент:', appData.content);
                 
                 // Обновляем счетчики категорий
                 appData.categories.forEach(category => {
@@ -601,56 +597,86 @@
                 });
                 
             } catch (error) {
+                console.error('Полная ошибка:', error);
                 throw new Error('Не удалось загрузить данные: ' + error.message);
             }
         }
 
-        // Получение данных из Google Sheets
-        async function fetchGoogleSheetData(url) {
-            // Используем CORS прокси для обхода ограничений
-            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+        // Получение данных из локальных CSV файлов
+        async function fetchCSVData(url) {
+            try {
+                console.log(`Загружаем CSV: ${url}`);
+                const response = await fetch(url);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const csvText = await response.text();
+                console.log('Получен CSV:', csvText.substring(0, 200) + '...');
+                
+                return csvText;
+                
+            } catch (error) {
+                throw new Error(`Ошибка загрузки CSV: ${error.message}`);
+            }
+        }
+
+        // Парсинг CSV данных
+        function parseCSVData(csvText) {
+            const lines = csvText.trim().split('\n');
+            if (lines.length < 2) return [];
             
-            const response = await fetch(proxyUrl);
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            // Первая строка - заголовки
+            const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+            console.log('Заголовки:', headers);
+            
+            // Остальные строки - данные
+            const data = [];
+            for (let i = 1; i < lines.length; i++) {
+                const values = parseCSVLine(lines[i]);
+                if (values.length === 0) continue;
+                
+                const item = {};
+                headers.forEach((header, index) => {
+                    const value = values[index] || '';
+                    
+                    // Конвертируем числовые поля
+                    if (header === 'id' || header === 'category_id' || header === 'count' || header === 'views') {
+                        item[header] = parseInt(value) || 0;
+                    } else {
+                        item[header] = value.trim();
+                    }
+                });
+                
+                if (item.id) data.push(item);
             }
             
-            const proxyData = await response.json();
-            const text = proxyData.contents;
-            
-            // Удаляем JSONP обертку
-            const jsonText = text.substring(47).slice(0, -2);
-            const data = JSON.parse(jsonText);
-            
+            console.log('Обработанные данные:', data);
             return data;
         }
 
-        // Парсинг данных Google Sheets
-        function parseGoogleSheetData(data) {
-            if (!data.table || !data.table.rows || data.table.rows.length === 0) {
-                return [];
+        // Парсинг строки CSV (учитывает кавычки и запятые внутри)
+        function parseCSVLine(line) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+            
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                
+                if (char === '"') {
+                    inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                    result.push(current.trim().replace(/^"|"$/g, ''));
+                    current = '';
+                } else {
+                    current += char;
+                }
             }
             
-            const rows = data.table.rows;
-            const headers = rows[0].c.map(cell => cell ? cell.v : '');
-            
-            return rows.slice(1).map(row => {
-                const item = {};
-                if (!row.c) return null;
-                
-                row.c.forEach((cell, index) => {
-                    const key = headers[index];
-                    const value = cell ? cell.v : '';
-                    
-                    // Конвертируем числовые поля
-                    if (key === 'id' || key === 'category_id' || key === 'count' || key === 'views') {
-                        item[key] = parseInt(value) || 0;
-                    } else {
-                        item[key] = value;
-                    }
-                });
-                return item;
-            }).filter(item => item && item.id); // Фильтруем пустые строки
+            result.push(current.trim().replace(/^"|"$/g, ''));
+            return result;
         }
 
         // Отрисовка категорий
