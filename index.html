@@ -353,6 +353,13 @@
             flex-wrap: wrap;
         }
 
+        .content-speaker {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 13px;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
         .content-tags {
             display: flex;
             gap: 8px;
@@ -757,6 +764,7 @@
                                 ${item.views ? `<span>👁️ ${formatViews(item.views)}</span>` : ''}
                                 ${item.date ? `<span>📅 ${formatDate(item.date)}</span>` : ''}
                             </div>
+                            ${item.speaker ? `<div class="content-speaker">👤 ${item.speaker}</div>` : ''}
                             <div class="content-tags">
                                 ${parseTags(item.tags).map(tag => `<span class="content-tag">${tag}</span>`).join('')}
                             </div>
@@ -823,6 +831,7 @@
                 appData.filteredContent = allContent.filter(item => 
                     item.title.toLowerCase().includes(appData.searchQuery) ||
                     item.description.toLowerCase().includes(appData.searchQuery) ||
+                    item.speaker.toLowerCase().includes(appData.searchQuery) ||
                     item.tags.toLowerCase().includes(appData.searchQuery)
                 );
             }
