@@ -288,33 +288,13 @@
 
         .category-card {
             position: relative;
-            height: 140px;
+            height: 180px;
             border-radius: 16px;
             overflow: hidden;
             cursor: pointer;
             transition: all 0.3s ease;
-            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .category-card:nth-child(2n) {
-            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
-        }
-
-        .category-card:nth-child(3n) {
-            background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
-        }
-
-        .category-card:nth-child(4n) {
-            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
-        }
-
-        .category-card:nth-child(5n) {
-            background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
-        }
-
-        .category-card:nth-child(6n) {
-            background: linear-gradient(135deg, #db2777 0%, #ec4899 100%);
         }
 
         .category-card::before {
@@ -347,8 +327,8 @@
             position: absolute;
             top: 10px;
             right: 10px;
-            background: #3b82f6;
-            color: white;
+            background: #d4af37;
+            color: #2d2d2d;
             border-radius: 50%;
             width: 24px;
             height: 24px;
@@ -358,6 +338,7 @@
             font-size: 12px;
             font-weight: 600;
             z-index: 3;
+            box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
         }
 
         .category-content {
@@ -654,7 +635,7 @@
             }
             
             .category-card {
-                height: 120px;
+                height: 160px;
             }
             
             .container {
@@ -1055,10 +1036,6 @@
                 <div class="category-card" onclick="openCategory(${category.id})">
                     ${category.image ? `<img src="${category.image}" alt="${category.title}" class="category-image" onerror="this.style.display='none'">` : ''}
                     <div class="category-badge">${category.count || 0}</div>
-                    <div class="category-content">
-                        <div class="category-title">${category.title}</div>
-                        <div class="category-subtitle">${category.subtitle || ''}</div>
-                    </div>
                 </div>
             `).join('');
             
